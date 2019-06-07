@@ -19,23 +19,35 @@
 int main(int ArgNum,char* Args[]) {
    srand(time(NULL));
 
-   if (ArgNum!=2)
+   if (ArgNum>3)
    {
-      printf("Nieprawidłowa liczba argumnetów!\n");
+      printf("Niepoprawna liczba argumentów!\n");
       return 1;
    }
-   else// jezeli został podany tylko jeden argument
+   else// jezeli liczba argumentów jest prawidłowa
    {
-     if(ISnumber(Args[1])!=1){// błędnu argument
-      printf("Zły argument! Podaj liczbę");
+     if(ArgNum>=2 && ISnumber(Args[1])!=1){// błędny argument
+      printf("Zły argument! Podaj liczbę, lub jeżeli wywołujesz opcję \"-debug\" dodaj ją na samym końcu!");
       return 1;
+     }
+
+     if(ArgNum==3){// jezeli jest trzeci argument sprawdz czy to -debug
+         if (strcmp(Args[2],"-debug")==0)
+         {
+             Debug=1;
+         }
+         else
+         {
+            printf("Drugi argument jest nie jest poprawny \n");
+            return 1;
+         }
      }
    }
    pthread_t Watki[atoi(Args[1])];// tworzenie tablicy watkow
 
    //printf("rozdzielanie watkow!\n");
 
-   for (size_t i = 0; i < atoi(Args[1]); i++)
+   for (int i = 0; i < atoi(Args[1]); i++)
    {
       
       int losowa=rand()%2;
@@ -52,7 +64,6 @@ int main(int ArgNum,char* Args[]) {
       }
       
    }
-   // watki rozmieszczone teraz czas na nieskonczonego while-a
    lewy=PierwszyNaLiscie(PierwszeMiasto);
    prawy=PierwszyNaLiscie(DrugieMiasto);
 
@@ -64,7 +75,7 @@ int main(int ArgNum,char* Args[]) {
       wynik=pthread_create(&Watki[i],NULL,&PracaDlawatku,arg);
 
       if (wynik!=0){
-      printf("nie udalo sie utworzyc watku %d\n",i);   
+      printf("Nie udalo sie utworzyc watku numer %d\n",i);   
       return 1; 
       }  
       

@@ -20,12 +20,12 @@
   extern int Debug;// zmienna okreslajaca czy program zostal odpalony z -debug
 
 void Town(){
-    int n = rand() %10 + 1;// zwraca iczbe od 1 do 10 
+    int n = rand()%10 + 1;// zwraca iczbe od 1 do 10 
     sleep(n);// miasto wymusza chwilkę przerwy
 }
 
 
-int ISnumber(char*string){// returns 1 if string is long number
+int ISnumber(char*string){// zwraca 1 jeżeli to jedna liczba
     int good=1;// its good, its long number
     int lenght= strlen(string);
 
@@ -38,46 +38,64 @@ int ISnumber(char*string){// returns 1 if string is long number
 }
 
 void *PracaDlawatku(void* numer1){// numer to swój wałany numer
-    int numer=*((int*)numer1);
+    int numer=*((int*)numer1);// rzutowanie numerku watku
     SAMOCHOD obiekt;
+    int kierunek=0;// okresla na którą stronę mostu samochód jedzie
+    int LewaLista,PrawaLista;// zmienne określające jaki samochód znajduje sie na samym początku kolejki
     while (1==1)
     {
         pthread_mutex_lock(&listowyMutex);
-        int LewaLista=lewy;
-        int Prawalista=prawy;
+         LewaLista=lewy;
+         PrawaLista=prawy;
         pthread_mutex_unlock(&listowyMutex);
 
-        while(numer!=LewaLista && numer!=Prawalista )// prawa lista i lewa lista określa numer watku ktory jest na samym poczatku
-        {                                               // jeżeli numer tego konkretnegon
+        while(numer!=LewaLista && numer!=PrawaLista )// prawa lista i lewa lista określa numer watku ktory jest na samym poczatku
+        {                    
+           // printf("        Watek numer %d sprawdza numerki kture wynosza %d %d \n",numer,LewaLista,Prawalista);                           // jeżeli numer tego konkretnegon
             pthread_mutex_lock(&listowyMutex);
+            lewy=PierwszyNaLiscie(PierwszeMiasto);
+            prawy=PierwszyNaLiscie(DrugieMiasto);
+
             LewaLista=lewy;
-            Prawalista=prawy;
+            PrawaLista=prawy;
             pthread_mutex_unlock(&listowyMutex);
         }
-
-        // trzeba usunac obiekt listy 
-
         
-        pthread_mutex_lock(&glownyMutex);
+        pthread_mutex_lock(&glownyMutex);// poniżej jest fragment kodu w którym można by umieścić symboliczny most-działania na wspólnej zmiennej
         pthread_mutex_lock(&listowyMutex);
 
         if (numer==LewaLista)// samochod byl po lewej stronie/ pierwszym miescie
         {
             obiekt=PoPList(&PierwszeMiasto); 
+            kierunek=1;// samochód jedzie na prawą stronę mostu
             Pisz(numer,1);
-            Add(&DrugieMiasto,obiekt.watek,obiekt.Numer);
-            lewy=PierwszyNaLiscie(PierwszeMiasto);
         }
         else
         {
             obiekt=PoPList(&DrugieMiasto);
+            kierunek=0;// samochód jedzie na lewą stronę mostu
             Pisz(numer,0);
-            Add(&PierwszeMiasto,obiekt.watek,obiekt.Numer);
-            prawy=PierwszyNaLiscie(DrugieMiasto);
         }
+
+        if(kierunek==1)
+            Add(&DrugieMiasto,obiekt.watek,obiekt.Numer);
+        else
+            Add(&PierwszeMiasto,obiekt.watek,obiekt.Numer);// jak robimy na zmiennych warunkowaych to można jakoś zostawić 
+
+        pthread_mutex_unlock(&listowyMutex);
+
+
+        lewy=PierwszyNaLiscie(PierwszeMiasto);
+        prawy=PierwszyNaLiscie(DrugieMiasto);
+
         pthread_mutex_unlock(&listowyMutex);
         pthread_mutex_unlock(&glownyMutex);
-        Town();// watek jest w miescie, nie ważne w którym 
+        Town();// watek jest w miescie
+
+        pthread_mutex_lock(&listowyMutex);// samochód ustawia się w kolejkę
+
+
+
     }
 
 }
@@ -91,7 +109,7 @@ void Pisz(int numer,int kierunek){// jeżeli kierunek =1 to znaczy że samochód
     }
     else
     {
-        /* code */
+       
     }
     
 }
