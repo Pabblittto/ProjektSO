@@ -150,12 +150,20 @@ int wynik=0;// na poczatku wynik jest z góry fałszem
     if (poczatek==NULL)// lista pusta to raczej go nie ma w tej liscie
         return wynik;
     
-    
+        if(poczatek->Obiekt.Numer==numerSamochodu)// od razu na poczatku było
+        {
+            wynik=1;
+            return wynik;
+        }
 
-
-    while (poczatek->Obiekt.Numer!=numerSamochodu)// jeżeli dany obiekt nie jest poszukiwanym obiektem to lec dalej 
+    while (poczatek->next!=NULL)// jeżeli dany obiekt nie jest poszukiwanym obiektem to lec dalej 
     {
-        poczatek=poczatek->next;
+        if (poczatek->Obiekt.Numer==numerSamochodu)
+        {
+            wynik=1;
+            return wynik;
+        }
+        poczatek=poczatek->next;// tu trzeba zmienić, 
     }
     // tu albo znalazło taki obiekt albo przeszło po wszystkich elementah na liście 
     // więc....:
