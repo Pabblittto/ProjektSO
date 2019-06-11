@@ -6,7 +6,6 @@
 #ifndef SAMOCHOD
 typedef struct Samochod{
    int Numer;
-   pthread_t * watek;
 } SAMOCHOD;
 #endif
 
@@ -27,11 +26,14 @@ typedef struct list // lista watkow ktore maja pierwszenstwo- ma to zapobiegac z
 
 
 
-void Add(List** poczatek,pthread_t* watek,int numer);// dodaje watek do listy na sam koniec
+void Add(List** poczatek,int numer);// dodaje watek do listy na sam koniec
 void MoveToLast(List** poczatek,pthread_t* watek); // przesuwa watek z listy na koniec kolejki - tej samej listy
 int NumberInList(List* pocztek,pthread_t* watek);// zwraca numer miejsca na którym znajduje się dany wątek 
 int ElementsInList(List* poczatek);// zwraca liczbe elementow w liscie
 SAMOCHOD PoPList(List** poczatek);// wywala pierwszy element z listy i cały obiekt na niego 
+
+void WywalZKolejki(List** poczatek,int numerSamochodu);// wywala z listy dany numer samochodu
+int CzyJestWLiscie(List* poczatek,int numerSamochodu);// funkcja okreslająca czy dany samochod jest w liscie, 0- fałsz , 1 prawda
 
 int PierwszyNaLiscie(List* poczatek);// zwraca numer watku ktory jest pierwszy na liscie, jezeli lista jest pusta- zwraca -1
 

@@ -3,6 +3,7 @@
         "list.h": "c",
         "stdlib.h": "c",
         "stdio.h": "c",
-        "pthread.h": "c"
+        "pthread.h": "c",
+        "functions.h": "c"
     }
 }
