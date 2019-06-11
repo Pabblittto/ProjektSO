@@ -32,60 +32,6 @@ void Add(List** poczatek, int numer){
 }
 
 
-// void MoveToLast(List** poczatek,pthread_t* watek){// wycian dany watek i przesuwa go na sam koniec kolejki/listy
-
-//     List* PierwszyObiekt=*poczatek;
-//     List* NowyPoczatek=*poczatek;// jezeli watek jest gdzieś w śrdoku listy to poczatek zostanie tam gdzie był
-
-
-//     if ((*poczatek)->Obiekt.watek==watek)
-//     {// jezeli poszukiwany watek jest na samym poczatku to go przesuwa na koniec i już
-//         NowyPoczatek=(*poczatek)->next;
-//         PierwszyObiekt->next=NULL;
-        
-//         while((*poczatek)->next!=NULL)
-//         {
-//            *poczatek=(*poczatek)->next;
-//         }
-
-//         (*poczatek)->next=PierwszyObiekt;
-        
-//     }
-//     else
-//     {// jezeli poszukiwany watek jest gdzies w srodku
-
-//         while((*poczatek)->next->Obiekt.watek!=watek)// jezeli kolejnym elementem nie jest element z poszukiwanym watkiem to szukaj dalej
-//         {
-//             (*poczatek) = (*poczatek)->next;
-//         }
-
-//         List* SzukanyElement=(*poczatek)->next;// ten element trzeba przeniesc na sam koniec
-//         SzukanyElement->next=NULL;
-        
-//         (*poczatek)->next=(*poczatek)->next->next;
-
-//         while ((*poczatek)->next!=NULL)
-//         {
-//            (*poczatek)=(*poczatek)->next;
-//         }// tu jest znajdowany koniec listy 
-
-//         (*poczatek)->next=SzukanyElement;
-
-//     }
-
-//     (*poczatek)=NowyPoczatek;
-// }
-
-// int NumberInList(List* pocztek,pthread_t* watek){
-//     int Numer=1;
-//     while (pocztek->Obiekt.watek!=watek)
-//     {
-//         pocztek=pocztek->next;
-//         Numer++;
-//     }
-    
-//     return Numer;
-// }
 
 int ElementsInList(List* poczatek){ // zwraca ilość elementów w liście
     int Numer=0;
