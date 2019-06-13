@@ -5,8 +5,6 @@
 #include <unistd.h>
 #include "Headers/list.h"
 #include "Headers/functions.h"
-
-   List* ListaGlodzenia=NULL;// lista okreslajaca kto powinien przejechac przez most wczesniej-- to sie moze przydac wprzy zmiennych warunkowcy 
    
    List* PierwszeMiasto=NULL;
    List* PierwszaKolejka=NULL;
@@ -14,14 +12,8 @@
    List* DrugieMiasto=NULL;
    List* DrugaKolejka=NULL;
 
-   int lewy;
-   int prawy;
-
    pthread_mutex_t glownyMutex = PTHREAD_MUTEX_INITIALIZER;//mutex odpowiedzialny za pilnowanie samego mostu, aby wylacznie jeden samochod na nim dzialal
-   pthread_mutex_t listowyMutex = PTHREAD_MUTEX_INITIALIZER;// mutex odpowiedzialny za pilnowanie list przed mostem 
    pthread_mutex_t pisanieMutex = PTHREAD_MUTEX_INITIALIZER;// mutex odpowiedzialny za pilnowanie WSZYSTKICH zamiennych oraz bufora wyjscia,
-   pthread_mutex_t miastowyMutex = PTHREAD_MUTEX_INITIALIZER;// mutex odpowiedzialny za pilnowanie list miast
-   pthread_mutex_t zmienneMutex = PTHREAD_MUTEX_INITIALIZER;// mutex odpowiedzialny za pilnowanie wspolnych zmiennych takich jak: numernamozcie, KierunekJAzdy
 
    int NumerNaMoscie=0;// numerek samochodu który jest aktualnie na moscie
    int KierunakJazdy=0;// kierunek określający kierunek jazdy samochodu, który znajduje sie na moście
@@ -64,7 +56,6 @@ int main(int ArgNum,char* Args[]) {
    }
    pthread_t Watki[atoi(Args[1])];// tworzenie tablicy watkow
 
-   //printf("rozdzielanie watkow!\n");
 
    for (int i = 0; i < atoi(Args[1]); i++)
    {
@@ -74,17 +65,13 @@ int main(int ArgNum,char* Args[]) {
       if (losowa==0)// losowe rozmieszczenie samochodow/watkow w miastach
       {
          Add(&PierwszaKolejka,i);
-         //Add(&ListaGlodzenia,i);
       }
       else
       {
          Add(&DrugaKolejka,i);
-        // Add(&ListaGlodzenia,i);
       }
       
    }
-  // lewy=PierwszyNaLiscie(PierwszeMiasto); 
-  // prawy=PierwszyNaLiscie(DrugieMiasto);
 
    int wynik;
    for (int i = 0; i < atoi(Args[1]); i++)

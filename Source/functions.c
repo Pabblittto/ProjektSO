@@ -15,14 +15,8 @@
     extern List* DrugaKolejka;
     extern List* PierwszaKolejka;
 
-    extern int lewy;
-    extern int prawy;
-
     extern pthread_mutex_t glownyMutex;
-    extern pthread_mutex_t listowyMutex;
     extern pthread_mutex_t pisanieMutex;
-    extern pthread_mutex_t miastowyMutex;
-    extern pthread_mutex_t zmienneMutex;
 
     extern int NumerNaMoscie;
     extern int KierunakJazdy;
@@ -48,10 +42,7 @@ int ISnumber(char*string){// zwraca 1 jeżeli to jedna liczba
 }
 
 void *PracaDlawatku(void* numer1){// numer to swój wałany numer
-    int numer=*((int*)numer1);// rzutowanie numerku watku
-    SAMOCHOD obiekt;
-    int kierunek=0;// okresla na którą stronę mostu samochód jedzie
-    int LewaLista,PrawaLista;// zmienne określające jaki samochód znajduje sie na samym początku kolejki
+    int numer=*((int*)numer1);// rzutowanie numerku watku;
     int StronaRzeki=1;// zmienna określająca po której stronie rzeki znajduje sie samochód, na dole jest funkcja określająca, po kótrj sie znajduje 
                 // jezeli strona rzeki jest =0 to jest po lewej stronie, pierwszej stronie
     
@@ -65,22 +56,18 @@ void *PracaDlawatku(void* numer1){// numer to swój wałany numer
         
         pthread_mutex_lock(&glownyMutex);// poniżej jest fragment kodu w którym można by umieścić symboliczny most-działania na wspólnej zmiennej
         
-        pthread_mutex_lock(&listowyMutex);
         pthread_mutex_lock(&pisanieMutex);
             if (StronaRzeki==0)// samochód jest po lewej stronie, wywal go z kolejki pierwszej
                 WywalZKolejki(&PierwszaKolejka,numer);
             else
                 WywalZKolejki(&DrugaKolejka,numer);
         pthread_mutex_unlock(&pisanieMutex);
-        pthread_mutex_unlock(&listowyMutex);
         
 
         // w tym momencie samochód jest na moście
         pthread_mutex_lock(&pisanieMutex);
-        pthread_mutex_lock(&zmienneMutex);
             NumerNaMoscie=numer;
             KierunakJazdy=StronaRzeki;// kierunak jazdy jest równy stronie rzeki PONIEWAŻ stronaRzeki=0 to jest po lewej stronie i jedzie w prawo
-        pthread_mutex_unlock(&zmienneMutex);
         pthread_mutex_unlock(&pisanieMutex);
 
 
@@ -91,16 +78,13 @@ void *PracaDlawatku(void* numer1){// numer to swój wałany numer
         sleep(1);// pauza na 1 sekunde żeby jechał przez most
 
         pthread_mutex_lock(&pisanieMutex);
-        pthread_mutex_lock(&zmienneMutex);
             NumerNaMoscie=-1;// nie ma nikogo na moscie
-        pthread_mutex_unlock(&zmienneMutex);
         pthread_mutex_unlock(&pisanieMutex);
 
         pthread_mutex_unlock(&glownyMutex);// samochod opuszcza most
 
 
         pthread_mutex_lock(&pisanieMutex);
-        pthread_mutex_lock(&miastowyMutex);
         if (StronaRzeki==0)// jeżeli samochód był po lewej stronie rzeki to teraz jest po prawej stronie rzeki
         {
             StronaRzeki=1;
@@ -111,7 +95,6 @@ void *PracaDlawatku(void* numer1){// numer to swój wałany numer
             StronaRzeki=0;// samochód był po prawej stronie i wjachał na lewą stronę rzeki
             Add(&PierwszeMiasto,numer);
         }
-        pthread_mutex_unlock(&miastowyMutex);
         pthread_mutex_unlock(&pisanieMutex);
 
 
@@ -123,24 +106,16 @@ void *PracaDlawatku(void* numer1){// numer to swój wałany numer
         // samochód wyjechał z miasta i jedzie do kolejki przed most
 
         pthread_mutex_lock(&pisanieMutex);
-        pthread_mutex_lock(&listowyMutex);// samochód wyjezdza z miasta i jedzie do kolejki
         if(StronaRzeki==0)// jak samochód jest po lewej stronie
         {
-            pthread_mutex_lock(&miastowyMutex);
-                WywalZKolejki(&PierwszeMiasto,numer);
-            pthread_mutex_unlock(&miastowyMutex);
-
+            WywalZKolejki(&PierwszeMiasto,numer);
             Add(&PierwszaKolejka,numer);// podjachał do kolejki
         }
         else
         {
-            pthread_mutex_lock(&miastowyMutex);
-                WywalZKolejki(&DrugieMiasto, numer);
-            pthread_mutex_unlock(&miastowyMutex);
-
+            WywalZKolejki(&DrugieMiasto, numer);
             Add(&DrugaKolejka, numer);
         }
-        pthread_mutex_unlock(&listowyMutex);
         pthread_mutex_unlock(&pisanieMutex);
 
 
@@ -165,8 +140,6 @@ void Pisz(){// jeżeli kierunek =1 to znaczy że samochód jedzie na prawo
     }
     else
     {// jest włączony motyw -debug
-
-
     char* WskaznikDrugieMiasto=ListaSamochodow(DrugieMiasto);
     char* WskaznikPierwszeMiasto=ListaSamochodow(PierwszeMiasto);
 
@@ -178,14 +151,6 @@ void Pisz(){// jeżeli kierunek =1 to znaczy że samochód jedzie na prawo
         printf("A-[%s] [%s]>>> [>> %d >>] <<<[%s] [%s]-B \n",WskaznikPierwszeMiasto,WskaznikPierwszaKolejka,NumerNaMoscie,WskaznikDrugaKolejka,WskaznikDrugieMiasto);
         else
         printf("A-[%s] [%s]>>> [<< %d <<] <<<[%s] [%s]-B \n",WskaznikPierwszeMiasto,WskaznikPierwszaKolejka,NumerNaMoscie,WskaznikDrugaKolejka,WskaznikDrugieMiasto);
-
-
-
-    //free(WskaznikPierwszeMiasto);
-    //free(WskaznikPierwszaKolejka);
-    //free(WskaznikDrugieMiasto);
-    //free(WskaznikDrugaKolejka);
-
     }
     
 }
