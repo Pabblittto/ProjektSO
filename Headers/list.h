@@ -2,6 +2,8 @@
 #define LIST_H "LIST_H"
 #include<pthread.h>
 #include <stdlib.h>
+#include<string.h>
+#include <stdio.h>
 
 #ifndef SAMOCHOD
 typedef struct Samochod{
@@ -36,5 +38,7 @@ void WywalZKolejki(List** poczatek,int numerSamochodu);// wywala z listy dany nu
 int CzyJestWLiscie(List* poczatek,int numerSamochodu);// funkcja okreslająca czy dany samochod jest w liscie, 0- fałsz , 1 prawda
 
 int PierwszyNaLiscie(List* poczatek);// zwraca numer watku ktory jest pierwszy na liscie, jezeli lista jest pusta- zwraca -1
+
+char* ListaSamochodow(List* poczatek); //zwraca wskaźnik na stringa zawierajacego liste samochodow
 
 #endif

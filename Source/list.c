@@ -119,3 +119,21 @@ int wynik=0;// na poczatku wynik jest z góry fałszem
 
     return wynik;
 }
+
+char* ListaSamochodow(List* poczatek){
+
+    int ilosc= ElementsInList(poczatek);// ile elementow jest liscie- zeby wiedziec ile zarezerwowac miejsca przez mallock
+
+    char* wynik= calloc(ilosc*2,sizeof(char));// ilosc*2 poniewaz po licznie jest przecinek 
+    char* buffor= calloc(4,sizeof(char));// stworzony bufor, który może pomieścić liczbe 0-9999 
+    while (poczatek!=NULL)
+    {
+        sprintf(buffor,"%d",poczatek->Obiekt.Numer);
+       strcat(wynik,buffor);
+       char znak[2]=",";
+       strcat(wynik,znak);
+       poczatek=poczatek->next;
+    }
+
+    return wynik;
+}

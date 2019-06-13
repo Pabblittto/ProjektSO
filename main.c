@@ -17,11 +17,11 @@
    int lewy;
    int prawy;
 
-   pthread_mutex_t glownyMutex = PTHREAD_MUTEX_INITIALIZER;
-   pthread_mutex_t listowyMutex = PTHREAD_MUTEX_INITIALIZER;
-   pthread_mutex_t pisanieMutex = PTHREAD_MUTEX_INITIALIZER;
-   pthread_mutex_t miastowyMutex = PTHREAD_MUTEX_INITIALIZER;
-   pthread_mutex_t zmienneMutex = PTHREAD_MUTEX_INITIALIZER;
+   pthread_mutex_t glownyMutex = PTHREAD_MUTEX_INITIALIZER;//mutex odpowiedzialny za pilnowanie samego mostu, aby wylacznie jeden samochod na nim dzialal
+   pthread_mutex_t listowyMutex = PTHREAD_MUTEX_INITIALIZER;// mutex odpowiedzialny za pilnowanie list przed mostem 
+   pthread_mutex_t pisanieMutex = PTHREAD_MUTEX_INITIALIZER;// mutex odpowiedzialny za pilnowanie WSZYSTKICH zamiennych oraz bufora wyjscia,
+   pthread_mutex_t miastowyMutex = PTHREAD_MUTEX_INITIALIZER;// mutex odpowiedzialny za pilnowanie list miast
+   pthread_mutex_t zmienneMutex = PTHREAD_MUTEX_INITIALIZER;// mutex odpowiedzialny za pilnowanie wspolnych zmiennych takich jak: numernamozcie, KierunekJAzdy
 
    int NumerNaMoscie=0;// numerek samochodu który jest aktualnie na moscie
    int KierunakJazdy=0;// kierunek określający kierunek jazdy samochodu, który znajduje sie na moście

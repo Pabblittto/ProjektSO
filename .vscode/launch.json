@@ -28,7 +28,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "/home/pabblo/Desktop/Projekt drugi/MainOut",
-            "args": ["6"],
+            "args": ["6","-debug"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
