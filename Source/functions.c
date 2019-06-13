@@ -193,10 +193,10 @@ void Pisz(){// jeżeli kierunek =1 to znaczy że samochód jedzie na prawo
 
 
 
-    free(WskaznikPierwszeMiasto);
-    free(WskaznikPierwszaKolejka);
-    free(WskaznikDrugieMiasto);
-    free(WskaznikDrugaKolejka);
+    //free(WskaznikPierwszeMiasto);
+    //free(WskaznikPierwszaKolejka);
+    //free(WskaznikDrugieMiasto);
+    //free(WskaznikDrugaKolejka);
 
     }
     
