@@ -9,7 +9,6 @@ void Add(List** poczatek, int numer){
     if ((*poczatek)==NULL)// nie ma obietow na liscie 
     {
         (*poczatek)=calloc(1,sizeof(List));
-       // (*poczatek)->Obiekt.watek=watek;
         (*poczatek)->next=NULL;
         (*poczatek)->Obiekt.Numer=numer;
     }
@@ -22,7 +21,6 @@ void Add(List** poczatek, int numer){
         List* tmp= calloc(1,sizeof(List));
 
         tmp->next=NULL;
-       // tmp->Obiekt.watek=watek;
         tmp->Obiekt.Numer=numer;
         (*poczatek)->next=tmp;
     }
@@ -85,9 +83,6 @@ void WywalZKolejki(List** poczatek,int numerSamochodu){
         }
 
     (*poczatek)=NowyPoczatek;
-
-
-
 }
 
 int CzyJestWLiscie(List* poczatek,int numerSamochodu){// funkcja okreslająca czy dany samochod jest w liscie, 0- fałsz , 1 prawda
@@ -124,7 +119,7 @@ char* ListaSamochodow(List* poczatek){
 
     int ilosc= ElementsInList(poczatek);// ile elementow jest liscie- zeby wiedziec ile zarezerwowac miejsca przez mallock
 
-    char* wynik= calloc(ilosc*2,sizeof(char));// ilosc*2 poniewaz po licznie jest przecinek 
+    char* wynik= calloc(ilosc*2,sizeof(char));// ilosc*2 poniewaz po liczbie jest przecinek 
     char* buffor= calloc(4,sizeof(char));// stworzony bufor, który może pomieścić liczbe 0-9999 
     while (poczatek!=NULL)
     {
