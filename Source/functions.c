@@ -157,40 +157,28 @@ void Pisz(){// jeżeli kierunek =1 to znaczy że samochód jedzie na prawo
 
     if(Debug==0){// program został uruchomiony bez motywu -debug
 
-   // pthread_mutex_lock(&miastowyMutex);
-   // pthread_mutex_lock(&listowyMutex);
-   // pthread_mutex_lock(&zmienneMutex);
-    //pthread_mutex_lock(&pisanieMutex);
         if (KierunakJazdy==0)// jak samochów na moscie jedzie w prawo
         printf("A-%d %d>>> [>> %d >>] <<<%d %d-B \n",ElementsInList(PierwszeMiasto),ElementsInList(PierwszaKolejka),NumerNaMoscie,ElementsInList(DrugaKolejka),ElementsInList(DrugieMiasto));
         else
         printf("A-%d %d>>> [<< %d <<] <<<%d %d-B \n",ElementsInList(PierwszeMiasto),ElementsInList(PierwszaKolejka),NumerNaMoscie,ElementsInList(DrugaKolejka),ElementsInList(DrugieMiasto));
-    //pthread_mutex_unlock(&miastowyMutex);
-   // pthread_mutex_unlock(&listowyMutex);
-   // pthread_mutex_unlock(&pisanieMutex);
-    //pthread_mutex_unlock(&zmienneMutex);
+
     }
     else
     {// jest włączony motyw -debug
 
-    //pthread_mutex_lock(&miastowyMutex);
+
     char* WskaznikDrugieMiasto=ListaSamochodow(DrugieMiasto);
     char* WskaznikPierwszeMiasto=ListaSamochodow(PierwszeMiasto);
-    //pthread_mutex_unlock(&miastowyMutex);
 
-    //pthread_mutex_lock(&listowyMutex);
     char* WskaznikPierwszaKolejka=ListaSamochodow(PierwszaKolejka);
     char* WskaznikDrugaKolejka=ListaSamochodow(DrugaKolejka);
-    //pthread_mutex_unlock(&listowyMutex);
 
-    //pthread_mutex_lock(&zmienneMutex);
-    //pthread_mutex_lock(&pisanieMutex);
+
        if (KierunakJazdy==0)// jak samochów na moscie jedzie w prawo
         printf("A-[%s] [%s]>>> [>> %d >>] <<<[%s] [%s]-B \n",WskaznikPierwszeMiasto,WskaznikPierwszaKolejka,NumerNaMoscie,WskaznikDrugaKolejka,WskaznikDrugieMiasto);
         else
         printf("A-[%s] [%s]>>> [<< %d <<] <<<[%s] [%s]-B \n",WskaznikPierwszeMiasto,WskaznikPierwszaKolejka,NumerNaMoscie,WskaznikDrugaKolejka,WskaznikDrugieMiasto);
-    //pthread_mutex_unlock(&pisanieMutex);
-    //pthread_mutex_unlock(&zmienneMutex);
+
 
 
     free(WskaznikPierwszeMiasto);
