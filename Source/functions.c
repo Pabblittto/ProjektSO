@@ -24,6 +24,8 @@
     extern pthread_mutex_t miastowyMutex;
     extern pthread_mutex_t zmienneMutex;
 
+    extern pthread_cond_t ZmiennaWarunkowa;
+
     extern int NumerNaMoscie;
     extern int KierunakJazdy;
 
@@ -55,16 +57,24 @@ void *PracaDlawatku(void* numer1){// numer to swój wałany numer
     int StronaRzeki=1;// zmienna określająca po której stronie rzeki znajduje sie samochód, na dole jest funkcja określająca, po kótrj sie znajduje 
                 // jezeli strona rzeki jest =0 to jest po lewej stronie, pierwszej stronie
     
-     pthread_mutex_lock(&pisanieMutex);
+     pthread_mutex_lock(&listowyMutex);
     if(CzyJestWLiscie(PierwszaKolejka,numer)==1)// jak samochod jest jednak po lewej straonie to zmien
         StronaRzeki=0;// jak 0 to znaczy ze po lewej stronie , jak 1 to znaczy że po prawej stronie 
-    pthread_mutex_unlock(&pisanieMutex);
+    pthread_mutex_unlock(&listowyMutex);
 
     while (1==1)
     {
         
         pthread_mutex_lock(&glownyMutex);// poniżej jest fragment kodu w którym można by umieścić symboliczny most-działania na wspólnej zmiennej
         
+
+         while (!CzyPierwszyNaliscie(numer,StronaRzeki))
+            {
+                pthread_cond_wait(&ZmiennaWarunkowa, &glownyMutex);
+            }           
+        
+
+
         pthread_mutex_lock(&listowyMutex);
         pthread_mutex_lock(&pisanieMutex);
             if (StronaRzeki==0)// samochód jest po lewej stronie, wywal go z kolejki pierwszej
@@ -97,6 +107,8 @@ void *PracaDlawatku(void* numer1){// numer to swój wałany numer
         pthread_mutex_unlock(&pisanieMutex);
 
         pthread_mutex_unlock(&glownyMutex);// samochod opuszcza most
+
+        pthread_cond_broadcast(&ZmiennaWarunkowa);
 
 
         pthread_mutex_lock(&pisanieMutex);
@@ -189,3 +201,27 @@ void Pisz(){// jeżeli kierunek =1 to znaczy że samochód jedzie na prawo
     }
     
 }
+
+int CzyPierwszyNaliscie(int numer, int stronaRzeki){// zwraca 1 jeżeli prawda , 0 jeżlei nie 
+
+int numerekNaLiscie;
+
+    if (stronaRzeki==0)// samochod znajduje sie po lewej stronie
+    {
+        pthread_mutex_lock(&listowyMutex);
+        numerekNaLiscie= PierwszyNaLiscie(PierwszaKolejka);
+        pthread_mutex_unlock(&listowyMutex);
+    }
+    else
+    {
+        pthread_mutex_lock(&listowyMutex);
+        numerekNaLiscie= PierwszyNaLiscie(DrugaKolejka);
+        pthread_mutex_unlock(&listowyMutex);
+    }
+    
+    if (numerekNaLiscie==numer)
+    return 1;// jezlei liczby sa takie same zwróć prawde
+
+    return 0;    
+}
+

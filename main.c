@@ -23,6 +23,8 @@
    pthread_mutex_t miastowyMutex = PTHREAD_MUTEX_INITIALIZER;// mutex odpowiedzialny za pilnowanie list miast
    pthread_mutex_t zmienneMutex = PTHREAD_MUTEX_INITIALIZER;// mutex odpowiedzialny za pilnowanie wspolnych zmiennych takich jak: numernamozcie, KierunekJAzdy
 
+   pthread_cond_t ZmiennaWarunkowa= PTHREAD_COND_INITIALIZER;// zmienna warunkowa
+
    int NumerNaMoscie=0;// numerek samochodu który jest aktualnie na moscie
    int KierunakJazdy=0;// kierunek określający kierunek jazdy samochodu, który znajduje sie na moście
                   // 0 to jedzie w prawo , 1 to jedzie w lewo 
@@ -104,7 +106,6 @@ int main(int ArgNum,char* Args[]) {
    {
      pthread_join(Watki[i],NULL);
    }
-   
-
+   // moze tu nalezy odpalic syganl, zeby watki zaczely prace
    return 0;
 }
