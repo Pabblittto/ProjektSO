@@ -135,5 +135,6 @@ char* ListaSamochodow(List* poczatek){
        poczatek=poczatek->next;
     }
 
+
     return wynik;
 }
