@@ -54,7 +54,7 @@ void *PracaDlawatku(void* numer1){// numer to swój wałany numer
     while (1==1)
     {
         
-        pthread_mutex_lock(&glownyMutex);// poniżej jest fragment kodu w którym można by umieścić symboliczny most-działania na wspólnej zmiennej
+        pthread_mutex_lock(&glownyMutex);// poniżej jest fragment kodu w którym można by umieścić symboliczny most
         
         pthread_mutex_lock(&pisanieMutex);
             if (StronaRzeki==0)// samochód jest po lewej stronie, wywal go z kolejki pierwszej
