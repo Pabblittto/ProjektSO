@@ -6,7 +6,8 @@
 #include "Headers/list.h"
 #include "Headers/functions.h"
 
-   
+   List* GlownaKolejkaFIFO=NULL;// kolejka która pilnuje żeby żaden wątek czekający przed mostem nie został zagłodzony
+
    List* PierwszeMiasto=NULL;
    List* PierwszaKolejka=NULL;
 
@@ -16,7 +17,8 @@
 
    pthread_mutex_t glownyMutex = PTHREAD_MUTEX_INITIALIZER;//mutex odpowiedzialny za pilnowanie samego mostu, aby wylacznie jeden samochod na nim dzialal
    pthread_mutex_t pisanieMutex = PTHREAD_MUTEX_INITIALIZER;// mutex odpowiedzialny za pilnowanie WSZYSTKICH zamiennych oraz bufora wyjscia,
-  
+   
+
    pthread_cond_t ZmiennaWarunkowa= PTHREAD_COND_INITIALIZER;// zmienna warunkowa
 
    int NumerNaMoscie=0;// numerek samochodu który jest aktualnie na moscie
@@ -74,6 +76,8 @@ int main(int ArgNum,char* Args[]) {
       {
          Add(&DrugaKolejka,i);
       }
+
+      Add(&GlownaKolejkaFIFO,i);
       
    }
 

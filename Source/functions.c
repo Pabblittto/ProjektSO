@@ -9,6 +9,7 @@
 #include<pthread.h>
 #include "../Headers/list.h"
 
+    extern List* GlownaKolejkaFIFO;
     extern List* PierwszeMiasto;
     extern List* DrugieMiasto;
 
@@ -60,7 +61,7 @@ void *PracaDlawatku(void* numer1){// numer to swój wałany numer
         pthread_mutex_lock(&glownyMutex);// poniżej jest fragment kodu w którym można by umieścić symboliczny most-działania na wspólnej zmiennej
         
 
-         while (!CzyPierwszyNaliscie(numer,StronaRzeki))
+         while (!CzyPierwszyNaliscie(numer))
             {
                 pthread_cond_wait(&ZmiennaWarunkowa, &glownyMutex);
             }           
@@ -70,7 +71,9 @@ void *PracaDlawatku(void* numer1){// numer to swój wałany numer
                 WywalZKolejki(&PierwszaKolejka,numer);
             else
                 WywalZKolejki(&DrugaKolejka,numer);
-        pthread_mutex_unlock(&pisanieMutex);;
+
+                WywalZKolejki(&GlownaKolejkaFIFO,numer);// wyrzuca nnumer samochodu z kolejki
+        pthread_mutex_unlock(&pisanieMutex);
         
 
         // w tym momencie samochód jest na moście
@@ -92,7 +95,7 @@ void *PracaDlawatku(void* numer1){// numer to swój wałany numer
 
         pthread_mutex_unlock(&glownyMutex);// samochod opuszcza most
 
-        pthread_cond_broadcast(&ZmiennaWarunkowa);
+        pthread_cond_broadcast(&ZmiennaWarunkowa);// wysłanie sygnału wszystkim wątkom
 
 
         pthread_mutex_lock(&pisanieMutex);
@@ -127,13 +130,14 @@ void *PracaDlawatku(void* numer1){// numer to swój wałany numer
             WywalZKolejki(&DrugieMiasto, numer);
             Add(&DrugaKolejka, numer);
         }
+
+        Add(&GlownaKolejkaFIFO,numer);
         pthread_mutex_unlock(&pisanieMutex);
 
 
         pthread_mutex_lock(&pisanieMutex);// mutex na pisanie żeby nie było błędów bufora wyjścia
             Pisz();
         pthread_mutex_unlock(&pisanieMutex);
-
     }
 
 }
@@ -166,22 +170,13 @@ void Pisz(){// jeżeli kierunek =1 to znaczy że samochód jedzie na prawo
     
 }
 
-int CzyPierwszyNaliscie(int numer, int stronaRzeki){// zwraca 1 jeżeli prawda , 0 jeżlei nie 
+int CzyPierwszyNaliscie(int numer){// zwraca 1 jeżeli prawda , 0 jeżlei nie 
 
 int numerekNaLiscie;
 
-    if (stronaRzeki==0)// samochod znajduje sie po lewej stronie
-    {
         pthread_mutex_lock(&pisanieMutex);
-        numerekNaLiscie= PierwszyNaLiscie(PierwszaKolejka);
+        numerekNaLiscie= PierwszyNaLiscie(GlownaKolejkaFIFO);
         pthread_mutex_unlock(&pisanieMutex);
-    }
-    else
-    {
-        pthread_mutex_lock(&pisanieMutex);
-        numerekNaLiscie= PierwszyNaLiscie(DrugaKolejka);
-        pthread_mutex_unlock(&pisanieMutex);
-    }
     
     if (numerekNaLiscie==numer)
     return 1;// jezlei liczby sa takie same zwróć prawde
